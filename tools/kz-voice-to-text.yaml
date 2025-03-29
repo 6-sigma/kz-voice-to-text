@@ -1,0 +1,30 @@
+identity:
+  name: kz-voice-to-text
+  author: lueey
+  label:
+    en_US: kz-voice-to-text
+    zh_Hans: kz-voice-to-text
+    pt_BR: kz-voice-to-text
+description:
+  human:
+    en_US: use ali cloud api
+    zh_Hans: use ali cloud api
+    pt_BR: use ali cloud api
+  llm: use ali cloud api
+parameters:
+  - name: voice_file
+    type: file
+    required: true
+    label:
+      en_US: Voice file
+      zh_Hans: 音频文件
+      pt_BR: Query string
+    human_description:
+      en_US: use ali cloud api
+      zh_Hans: use ali cloud api
+      pt_BR: use ali cloud api
+    form: llm
+
+extra:
+  python:
+    source: tools/kz-voice-to-text.py

@@ -1,0 +1,53 @@
+credentials_for_provider:
+  access_id:
+    help:
+      en_US: ali cloud access_id
+      zh_Hans: 阿里云 access_id
+      pt_BR: alicloud access_id
+    label:
+      en_US: ali cloud access_id
+      zh_Hans: 阿里云 access_id
+    placeholder:
+      en_US: ali cloud access_id
+      zh_Hans: 阿里云 access_id
+    required: true
+    type: text-input
+    url: https://help.aliyun.com/zh/tingwu/api-tingwu-2023-09-30-gettaskinfo?spm=a2c4g.11186623.help-menu-454189.d_2_2_3_1.5e2e7792cbWUcu
+  access_secret:
+    help:
+      en_US: ali cloud access_secret
+      zh_Hans: 阿里云 access_secret
+      pt_BR: alicloud access_secret
+    label:
+      en_US: ali cloud access_secret
+      zh_Hans: 阿里云 access_secret
+    placeholder:
+      en_US: ali cloud access_secret
+      zh_Hans: 阿里云 access_secret
+    required: true
+    type: secret-input
+    url: https://help.aliyun.com/zh/tingwu/api-tingwu-2023-09-30-gettaskinfo?spm=a2c4g.11186623.help-menu-454189.d_2_2_3_1.5e2e7792cbWUcu
+  app_key:
+    label:
+      en_US: app key
+      zh_Hans: 阿里云 app key
+    required: false
+    type: text-input
+    url: https://help.aliyun.com/zh/tingwu/api-tingwu-2023-09-30-gettaskinfo?spm=a2c4g.11186623.help-menu-454189.d_2_2_3_1.5e2e7792cbWUcu
+identity:
+  author: lueey
+  name: kz-voice-to-text
+  label:
+    en_US: kz-voice-to-text
+    zh_Hans: kz-voice-to-text
+    pt_BR: kz-voice-to-text
+  description:
+    en_US: use ali cloud api
+    zh_Hans: use ali cloud api
+    pt_BR: use ali cloud api
+  icon: icon.svg
+tools:
+  - tools/kz-voice-to-text.yaml
+extra:
+  python:
+    source: provider/kz-voice-to-text.py

@@ -1,0 +1,11 @@
+[project]
+name = "kz-voice-to-text"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aliyun-python-sdk-core>=2.16.0",
+    "dify-plugin>=0.0.1b75",
+    "oss2>=2.19.1",
+]
