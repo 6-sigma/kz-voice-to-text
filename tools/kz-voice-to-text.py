@@ -31,9 +31,10 @@ def create_common_request(domain, version, protocolType, method, uri):
     return request
 
 class KzVoiceToTextTool(Tool):
-    def _upload_voice_file(self, voice_file_url: str) -> str:
+    def _upload_voice_file(self, voice_file_url: str, file_name: str) -> str:
         """上传语音文件到OSS并返回URL"""
         try:
+            logging.info(f"voice_file_url: {voice_file_url}")
             # 初始化OSS客户端
             auth = oss2.ProviderAuthV4(EnvironmentVariableCredentialsProvider())
             endpoint = "https://oss-cn-beijing.aliyuncs.com"
@@ -41,7 +42,7 @@ class KzVoiceToTextTool(Tool):
             bucket = oss2.Bucket(auth, endpoint, bucket_name, region="cn-beijing")
 
             # 上传文件
-            file_name = "voice_file"
+            # file_name = "voice_file"
             file_content = requests.get(voice_file_url).content
             
             put_result = bucket.put_object(
@@ -141,13 +142,16 @@ class KzVoiceToTextTool(Tool):
 
         try:
             # 上传文件到OSS
-            oss_url = self._upload_voice_file(voice_file_url.url)
+            logging.info(f"开始上传文件: {voice_file_url}")
+            oss_url = self._upload_voice_file(voice_file_url.url, voice_file_url.filename)
             logging.info(f"文件已上传至: {oss_url}")
+
+            file_name = voice_file_url.filename
 
             # 调用语音转文本服务
             # body = self._init_parameters(oss_url)
             print(oss_url)
-            body = self._init_parameters("https://kzbucket.oss-cn-beijing.aliyuncs.com/voice_file", app_key)
+            body = self._init_parameters(f"https://kzbucket.oss-cn-beijing.aliyuncs.com/{file_name}", app_key)
             request = create_common_request(
                 'tingwu.cn-beijing.aliyuncs.com',
                 '2023-09-30',
