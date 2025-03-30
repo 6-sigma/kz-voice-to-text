@@ -14,7 +14,7 @@ from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
 
 # 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 credentials = None
 client = None
@@ -31,41 +31,6 @@ def create_common_request(domain, version, protocolType, method, uri):
     return request
 
 class KzVoiceToTextTool(Tool):
-    def _upload_voice_file(self, voice_file_url: str, file_name: str) -> str:
-        """上传语音文件到OSS并返回URL"""
-        try:
-            logging.info(f"voice_file_url: {voice_file_url}")
-            # 初始化OSS客户端
-            auth = oss2.ProviderAuthV4(EnvironmentVariableCredentialsProvider())
-            endpoint = "https://oss-cn-beijing.aliyuncs.com"
-            bucket_name = "kzbucket"
-            bucket = oss2.Bucket(auth, endpoint, bucket_name, region="cn-beijing")
-
-            # 上传文件
-            # file_name = "voice_file"
-            file_content = requests.get(voice_file_url).content
-            
-            put_result = bucket.put_object(
-                file_name,
-                file_content,
-                headers={'Content-Type': 'audio/mpeg'}
-            )
-
-            result_dict = {
-                'status': put_result.status,
-                'request_id': put_result.request_id,
-                'etag': put_result.etag,
-                'version_id': getattr(put_result, 'version_id', None),
-                'crc64': getattr(put_result, 'crc64', None)
-            }
-            print(result_dict)
-
-            return f"https://{bucket_name}.{endpoint.replace('https://', '')}/{file_name}"
-        except Exception as e:
-            sys.excepthook(*sys.exc_info())
-            logging.error(f"上传失败: {str(e)}")
-            raise
-
     def _init_parameters(self, file_url: str, app_key: str) -> dict:
         return {
             'AppKey': app_key or 'RPUYI4dbUfFsbDTm',
@@ -135,23 +100,23 @@ class KzVoiceToTextTool(Tool):
 
         app_key = self.runtime.credentials.get("app_key", "")
 
-        voice_file_url = tool_parameters.get('voice_file')
+        voice_file_url = tool_parameters.get('voice_url')
         if not voice_file_url:
-            yield self.create_text_message("缺少语音文件参数")
+            yield self.create_text_message("缺少语音文件url参数")
             return
 
         try:
             # 上传文件到OSS
             logging.info(f"开始上传文件: {voice_file_url}")
-            oss_url = self._upload_voice_file(voice_file_url.url, voice_file_url.filename)
+            oss_url = voice_file_url
             logging.info(f"文件已上传至: {oss_url}")
 
-            file_name = voice_file_url.filename
+            # file_name = voice_file_url.filename
 
             # 调用语音转文本服务
             # body = self._init_parameters(oss_url)
             print(oss_url)
-            body = self._init_parameters(f"https://kzbucket.oss-cn-beijing.aliyuncs.com/{file_name}", app_key)
+            body = self._init_parameters(oss_url, app_key)
             request = create_common_request(
                 'tingwu.cn-beijing.aliyuncs.com',
                 '2023-09-30',
